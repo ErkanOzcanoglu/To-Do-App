@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const FilteredTasks = () => {
+const TaskLists = () => {
   return (
     <View>
-      <Text>FilteredTasks</Text>
+      <Text className="text-white">TaskLists</Text>
     </View>
   );
 };
 
-export default FilteredTasks;
+export default TaskLists;

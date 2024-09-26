@@ -1,18 +1,13 @@
 import { View, Text } from "react-native";
 import React from "react";
-import FilteredTasks from "@/components/home/filtered-tasks";
-import TasksList from "@/components/home/tasks-list";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Intro from "@/components/home/intro";
+import TaskLists from "@/components/home/task-lists";
 
 const Home = () => {
   return (
     <SafeAreaView>
-      <View className="bg-[#212121] h-full w-full">
-        <Intro />
-        <TasksList />
-        <Text className="text-red-700">asd</Text>
-      </View>
+      <Text className="text-white">Home</Text>
+      <TaskLists />
     </SafeAreaView>
   );
 };
