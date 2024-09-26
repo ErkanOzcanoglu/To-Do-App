@@ -19,7 +19,7 @@ const Task = ({ task }: TaskProps) => {
       </View>
       <View className="flex-row gap-5">
         <Sun size={24} color={"yellow"} />
-        <Text>{task.description}</Text>
+        <Text>{task.title}</Text>
       </View>
     </View>
   );
