@@ -14,7 +14,7 @@ const TasksList = ({ taskData }: TaskData) => {
   const [isFinishedData, setIsFinishedData] = useState<any[]>([]);
 
   const navigateToTask = () => {
-    router.navigate("./(tabs)/tasks");
+    router.navigate("/tasks");
   };
 
   useEffect(() => {
