@@ -1,5 +1,5 @@
-import { TouchableOpacity, View } from "react-native";
-import React from "react";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Text } from "../ui/text";
 import Task from "./task";
 import { useRoute } from "@react-navigation/native";
@@ -11,13 +11,18 @@ type TaskData = {
 
 const TasksList = ({ taskData }: TaskData) => {
   const router = useRouter();
+  const [isFinishedData, setIsFinishedData] = useState<any[]>([]);
 
   const navigateToTask = () => {
     router.navigate("./(tabs)/tasks");
   };
 
+  useEffect(() => {
+    setIsFinishedData(taskData.filter((task) => task.isFinished === false));
+  }, [taskData]);
+
   return (
-    <View className="mt-10">
+    <View className="pt-10">
       <View className="flex-row justify-between items-end">
         <Text className="text-muted ml-2 font-semibold text-2xl">
           Devam Eden
@@ -27,9 +32,11 @@ const TasksList = ({ taskData }: TaskData) => {
         </TouchableOpacity>
       </View>
       <View>
-        {taskData.map((task, index) => (
-          <Task key={index} task={task} />
-        ))}
+        <FlatList
+          scrollEnabled={false}
+          data={isFinishedData}
+          renderItem={({ item }) => <Task task={item} />}
+        />
       </View>
     </View>
   );

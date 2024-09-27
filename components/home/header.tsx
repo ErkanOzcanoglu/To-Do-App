@@ -15,11 +15,6 @@ const Header = () => {
           <Bell size={32} color={"black"} />
         </View>
       </View>
-      <View>
-        <Text className="font-semibold text-[40px] w-[360px] mt-10">
-          Günlük Görevlerini Ayarla
-        </Text>
-      </View>
     </View>
   );
 };
