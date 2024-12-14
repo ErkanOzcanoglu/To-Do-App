@@ -16,11 +16,15 @@ const TaskList = ({ task }: TaskListProps) => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    console.log("asd");
+    router.push("/(tabs)/task");
   };
   return (
     <>
-      <TouchableOpacity onPress={handleNavigate}>
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigate();
+        }}
+      >
         <View className="rounded-[10px] bg-muted mt-5 p-4 justify-between">
           <View>
             <View className="w-full flex-row justify-between">
