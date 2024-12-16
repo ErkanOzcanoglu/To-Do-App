@@ -51,7 +51,11 @@ const Home = () => {
     <SafeAreaView style={{ paddingTop: top, flex: 1 }}>
       <View className="bg-background p-4 w-full h-full">
         <Header />
-        <ScrollView>
+        <ScrollView
+          alwaysBounceVertical={false}
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
+        >
           <FilteredTasks taskData={notCompletedTasks} />
           {randomTasks.length > 0 ? (
             <TasksList taskData={randomTasks} />

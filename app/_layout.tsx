@@ -70,8 +70,10 @@ function RootLayoutNav() {
               statusBarStyle: isDarkColorScheme ? "light" : "dark",
               statusBarTranslucent: true,
               statusBarColor: "transparent",
+              animation: "slide_from_right",
+              animationDuration: 300,
             }}
-          />
+          ></Stack>
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

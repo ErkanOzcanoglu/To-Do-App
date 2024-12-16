@@ -6,9 +6,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useRouter } from "expo-router";
 
 export default function AddTask() {
   const addTask = useTaskStore((state) => state.addTask);
+  const router = useRouter();
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -76,6 +78,8 @@ export default function AddTask() {
           timeZone: "Europe/Istanbul",
         }),
       });
+
+      router.navigate(`/(task)/task-detail?id=${newTask.id}`);
     } catch (error) {
       console.error("Error saving task:", error);
     }

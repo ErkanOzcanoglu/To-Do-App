@@ -1,15 +1,7 @@
 import { View } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import {
-  Home,
-  List,
-  Map,
-  Plus,
-  PlusCircle,
-  Search,
-  UserRound,
-} from "lucide-react-native";
+import { Home, List, Plus } from "lucide-react-native";
 import { useTheme } from "@react-navigation/native";
 const _layout = () => {
   const { colors } = useTheme();

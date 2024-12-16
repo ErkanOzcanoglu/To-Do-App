@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useTaskStore } from "@/hooks/use-task-store";
 import { AlertTriangle, Calendar, Check, Clock, X } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 type TaskProps = {
   item: {
@@ -21,6 +22,7 @@ const Task = ({ item }: TaskProps) => {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { removeTask, toggleTask } = useTaskStore();
+  const router = useRouter();
 
   const handleDeleteInit = () => {
     setIsConfirming(true);
@@ -64,58 +66,66 @@ const Task = ({ item }: TaskProps) => {
 
   return (
     <View>
-      <Animated.View
-        style={{
-          transform: [{ translateX: slideAnim }],
+      <TouchableOpacity
+        onPress={() => {
+          router.navigate(`/(task)/task-detail?id=${item.id}`);
         }}
-        className={`p-4 mb-3 rounded-lg border border-slate-300 ${
-          item.isCompleted ? "bg-green-100" : "bg-gray-100"
-        }`}
       >
-        <View className="flex-row justify-between items-center mb-2">
-          <Text
-            onPress={() => toggleTask(item.id)}
-            className={`text-lg font-semibold ${
-              item.isCompleted ? "line-through text-gray-500" : "text-gray-800"
-            }`}
-          >
-            {item.title}
-          </Text>
-          <View className="flex-row space-x-2 gap-2">
-            <TouchableOpacity
+        <Animated.View
+          style={{
+            transform: [{ translateX: slideAnim }],
+          }}
+          className={`p-4 mb-3 rounded-lg border border-slate-300 ${
+            item.isCompleted ? "bg-green-100" : "bg-gray-100"
+          }`}
+        >
+          <View className="flex-row justify-between items-center mb-2">
+            <Text
               onPress={() => toggleTask(item.id)}
-              className={`p-2 rounded-full ${
-                item.isCompleted ? "bg-green-500" : "bg-gray-300"
+              className={`text-lg font-semibold ${
+                item.isCompleted
+                  ? "line-through text-gray-500"
+                  : "text-gray-800"
               }`}
             >
-              <Check size={16} color={item.isCompleted ? "white" : "gray"} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleDeleteInit}
-              className="p-2 rounded-full bg-red-500"
-            >
-              {isConfirming ? (
-                <AlertTriangle size={16} color="white" />
-              ) : (
-                <X size={16} color="white" />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Text className="text-gray-600 mb-2">{item.description}</Text>
-        <View className="flex-row space-x-4 text-sm text-gray-500">
-          <View className="flex-row items-center">
-            <Calendar size={14} color={"gray"} />
-            <Text className="ml-1">
-              {new Date(item.deadline).toLocaleDateString()}
+              {item.title}
             </Text>
+            <View className="flex-row space-x-2 gap-2">
+              <TouchableOpacity
+                onPress={() => toggleTask(item.id)}
+                className={`p-2 rounded-full ${
+                  item.isCompleted ? "bg-green-500" : "bg-gray-300"
+                }`}
+              >
+                <Check size={16} color={item.isCompleted ? "white" : "gray"} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleDeleteInit}
+                className="p-2 rounded-full bg-red-500"
+              >
+                {isConfirming ? (
+                  <AlertTriangle size={16} color="white" />
+                ) : (
+                  <X size={16} color="white" />
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className="flex-row items-center ml-2">
-            <Clock size={14} color={"gray"} />
-            <Text className="ml-1">{item.deadlineTime}</Text>
+          <Text className="text-gray-600 mb-2">{item.description}</Text>
+          <View className="flex-row space-x-4 text-sm text-gray-500">
+            <View className="flex-row items-center">
+              <Calendar size={14} color={"gray"} />
+              <Text className="ml-1">
+                {new Date(item.deadline).toLocaleDateString()}
+              </Text>
+            </View>
+            <View className="flex-row items-center ml-2">
+              <Clock size={14} color={"gray"} />
+              <Text className="ml-1">{item.deadlineTime}</Text>
+            </View>
           </View>
-        </View>
-      </Animated.View>
+        </Animated.View>
+      </TouchableOpacity>
       {isConfirming && (
         <View className="absolute right-0 top-0 bottom-0 flex-col items-center justify-center pr-2 gap-2">
           <TouchableOpacity
