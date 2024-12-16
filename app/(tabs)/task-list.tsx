@@ -7,38 +7,11 @@ import { useTaskStore } from "@/hooks/use-task-store";
 
 const TaskList = () => {
   const { tasks, setTasks } = useTaskStore();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const storedTasks = await AsyncStorage.getItem("@tasks");
-        if (storedTasks) {
-          setTasks(JSON.parse(storedTasks));
-        }
-        console.log("storedTasks", storedTasks);
-      } catch (error) {
-        console.error("Error loading tasks:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadTasks();
-  }, []);
 
   const clearStorage = async () => {
     await AsyncStorage.removeItem("@tasks");
     setTasks([]);
   };
-
-  if (isLoading) {
-    return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-background">
-        <ActivityIndicator size="large" />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
