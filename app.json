@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "To-Do-App",
-    "slug": "To-Do-App",
+    "name": "Starter Base",
+    "slug": "starter-base",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,6 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -19,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.starterbase"
     },
     "web": {
       "bundler": "metro",
