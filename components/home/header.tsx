@@ -11,7 +11,7 @@ const Header = () => {
           <Text className="text-xl">Merhaba </Text>
           <Text className="text-red-600 text-xl">Erkan👋</Text>
         </View>
-        <View className="bg-muted-foreground p-2 justify-center items-center rounded-full">
+        <View className="bg-gray-100 border border-slate-300 p-2 justify-center items-center rounded-full">
           <Bell size={32} color={"black"} />
         </View>
       </View>
