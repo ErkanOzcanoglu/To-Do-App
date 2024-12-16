@@ -7,6 +7,7 @@ interface TaskStore {
   addTask: (task: Task) => void;
   removeTask: (id: string) => void;
   toggleTask: (id: string) => void;
+  setTasks: (tasks: Task[]) => void;
   // loadTasks: () => Promise<void>;
 }
 
@@ -21,4 +22,5 @@ export const useTaskStore = create<TaskStore>((set) => ({
         task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
       ),
     })),
+  setTasks: (tasks) => set(() => ({ tasks })),
 }));

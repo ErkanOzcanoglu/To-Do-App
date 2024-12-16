@@ -1,20 +1,10 @@
 import { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-} from "react-native";
-import { useRouter } from "expo-router";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { SafeAreaView, Button } from "react-native";
 import { useTaskStore } from "@/hooks/use-task-store";
-import { Input } from "@/components/ui/input";
 import AddTaskForm from "@/components/tasks/add-task-form";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AddTask() {
-  const router = useRouter();
   const addTask = useTaskStore((state) => state.addTask);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -45,26 +35,37 @@ export default function AddTask() {
     }
   };
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!formData.title.trim()) return;
 
-    addTask({
+    const newTask = {
       id: Date.now().toString(),
       title: formData.title.trim(),
       description: formData.description.trim(),
-      deadline: formData.deadline,
+      deadline: formData.deadline.toISOString(),
       deadlineTime: formData.deadlineTime,
       isCompleted: false,
-      updatedAt: new Date(),
-      createdAt: new Date(),
-    });
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
 
-    setFormData({
-      title: "",
-      description: "",
-      deadline: new Date(),
-      deadlineTime: "12:00",
-    });
+    addTask(newTask);
+
+    try {
+      const existingTasks = await AsyncStorage.getItem("@tasks");
+      const tasks = existingTasks ? JSON.parse(existingTasks) : [];
+      tasks.push(newTask);
+      await AsyncStorage.setItem("@tasks", JSON.stringify(tasks));
+
+      setFormData({
+        title: "",
+        description: "",
+        deadline: new Date(),
+        deadlineTime: "12:00",
+      });
+    } catch (error) {
+      console.error("Error saving task:", error);
+    }
   };
 
   return (

@@ -9,12 +9,12 @@ type TaskProps = {
   task: {
     id: string;
     title: string;
-    createdAt: Date;
-    deadline: Date;
+    createdAt: any;
+    deadline: any;
     deadlineTime: string;
     description: string;
     isCompleted: boolean;
-    updatedAt: Date;
+    updatedAt: any;
   };
 };
 
@@ -56,9 +56,7 @@ const Task = ({ task }: TaskProps) => {
           <Text className="text-sm text-muted-foreground">
             {task.description}
           </Text>
-          <Text className="text-xs text-muted-foreground">
-            {task.deadline.toDateString()}
-          </Text>
+          <Text className="text-xs text-muted-foreground">{task.deadline}</Text>
         </View>
       </View>
 
