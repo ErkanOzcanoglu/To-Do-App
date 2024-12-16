@@ -2,9 +2,10 @@ import { View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Text } from "../ui/text";
 import { CalendarCheck } from "lucide-react-native";
+import { Task } from "@/types/task";
 
 type TaskData = {
-  taskData: any[];
+  taskData: Task[];
 };
 
 const FilteredTasks = ({ taskData }: TaskData) => {
@@ -13,50 +14,30 @@ const FilteredTasks = ({ taskData }: TaskData) => {
   const [monthlyTasks, setMonthlyTasks] = useState(0);
 
   useEffect(() => {
-    calculateDailyTasks();
-    calculateWeeklyTasks();
-    calculateMonthlyTasks();
+    calculateTasks();
   }, [taskData]);
 
-  const calculateDailyTasks = () => {
-    const currentDate = new Date();
-    const dailyTasks = taskData.filter((task) => {
-      const taskDate = new Date(task.endDateTime);
-      return (
-        taskDate.getDate() === currentDate.getDate() &&
-        taskDate.getMonth() === currentDate.getMonth() &&
-        taskDate.getFullYear() === currentDate.getFullYear()
-      );
+  const calculateTasks = () => {
+    const now = new Date().getTime();
+
+    const daily = taskData.filter((task) => {
+      const taskDate = new Date(task.deadline).getTime();
+      return taskDate - now < 86400000;
     });
 
-    setDailyTasks(dailyTasks.length);
-  };
-
-  const calculateWeeklyTasks = () => {
-    const currentDate = new Date();
-    const weeklyTasks = taskData.filter((task) => {
-      const taskDate = new Date(task.endDateTime);
-      return (
-        taskDate.getDate() >= currentDate.getDate() &&
-        taskDate.getMonth() === currentDate.getMonth() &&
-        taskDate.getFullYear() === currentDate.getFullYear()
-      );
+    const weekly = taskData.filter((task) => {
+      const taskDate = new Date(task.deadline).getTime();
+      return taskDate - now < 604800000;
     });
 
-    setWeeklyTasks(weeklyTasks.length);
-  };
-
-  const calculateMonthlyTasks = () => {
-    const currentDate = new Date();
-    const monthlyTasks = taskData.filter((task) => {
-      const taskDate = new Date(task.endDateTime);
-      return (
-        taskDate.getMonth() === currentDate.getMonth() &&
-        taskDate.getFullYear() === currentDate.getFullYear()
-      );
+    const monthly = taskData.filter((task) => {
+      const taskDate = new Date(task.deadline).getTime();
+      return taskDate - now < 2592000000;
     });
 
-    setMonthlyTasks(monthlyTasks.length);
+    setDailyTasks(daily.length);
+    setWeeklyTasks(weekly.length);
+    setMonthlyTasks(monthly.length);
   };
 
   return (

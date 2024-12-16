@@ -1,22 +1,8 @@
-import {
-  View,
-  Text,
-  Pressable,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
-import React, { useRef } from "react";
+import { View, Text, TouchableOpacity, Animated } from "react-native";
+import React, { useEffect, useRef } from "react";
 import { useTaskStore } from "@/hooks/use-task-store";
-import {
-  AlertTriangle,
-  Calendar,
-  Check,
-  CheckIcon,
-  Clock,
-  X,
-} from "lucide-react-native";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { AlertTriangle, Calendar, Check, Clock, X } from "lucide-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type TaskProps = {
   item: {
@@ -52,6 +38,18 @@ const Task = ({ item }: TaskProps) => {
       useNativeDriver: true,
     }).start(async () => {
       await removeTask(id);
+      setIsConfirming(false);
+      try {
+        const tasks = await AsyncStorage.getItem("@tasks");
+        if (tasks) {
+          const updatedTasks = JSON.parse(tasks).filter(
+            (task: any) => task.id !== id
+          );
+          await AsyncStorage.setItem("@tasks", JSON.stringify(updatedTasks));
+        }
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
     });
   };
 
@@ -62,10 +60,6 @@ const Task = ({ item }: TaskProps) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
-  };
-
-  const handleToggle = async (id: string) => {
-    await toggleTask(id);
   };
 
   return (
