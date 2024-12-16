@@ -1,8 +1,9 @@
 import { TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "../ui/text";
 import { CheckCheck, Sun } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import { getAllTasks } from "@/queries/task";
 
 type TaskListProps = {
   task: {
@@ -14,6 +15,11 @@ type TaskListProps = {
 
 const TaskList = ({ task }: TaskListProps) => {
   const router = useRouter();
+  const { data, isLoading } = getAllTasks();
+
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
 
   const handleNavigate = () => {
     router.push("/(tabs)/task");
