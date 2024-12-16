@@ -1,21 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Pressable, View } from "react-native";
+import { Platform, Pressable, View } from "react-native";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
 import { MoonStar } from "@/lib/icons/MoonStar";
 import { Sun } from "@/lib/icons/Sun";
 import { useColorScheme } from "@/lib/useColorScheme";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 export function ThemeToggle() {
   const { isDarkColorScheme, setColorScheme } = useColorScheme();
+
+  const toggleTheme = React.useCallback(async () => {
+    const newTheme = isDarkColorScheme ? "light" : "dark";
+    setColorScheme(newTheme);
+    await setAndroidNavigationBar(newTheme);
+    await AsyncStorage.setItem("theme", newTheme);
+
+    if (Platform.OS === "web") {
+      document.documentElement.classList.toggle("dark", !isDarkColorScheme);
+    }
+  }, [isDarkColorScheme]);
   return (
     <Pressable
-      onPress={() => {
-        const newTheme = isDarkColorScheme ? "light" : "dark";
-        setColorScheme(newTheme);
-        setAndroidNavigationBar(newTheme);
-        AsyncStorage.setItem("theme", newTheme);
-      }}
+      onPress={toggleTheme}
       className="web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2"
     >
       {({ pressed }) => (

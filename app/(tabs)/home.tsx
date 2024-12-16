@@ -26,18 +26,11 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <View className="bg-black w-full h-full">
+      <View className="bg-primary w-full h-full">
         <View>
           <Text>Home</Text>
           <Button title="Add Task" onPress={handleAddTask} />
           <Button title="Remove Task" onPress={handleRemoveTask} />
-        </View>
-        <View className="text-white">
-          {tasks.map((task) => (
-            <View key={task.id}>
-              <Text className="text-white">{task.title}</Text>
-            </View>
-          ))}
         </View>
       </View>
     </SafeAreaView>

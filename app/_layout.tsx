@@ -1,7 +1,7 @@
 import "@/global.css";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { Redirect, SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
@@ -37,29 +37,30 @@ export default function RootLayout() {
 
   React.useEffect(() => {
     (async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (Platform.OS === "web") {
-        // Adds the background color to the html element to prevent white background on overscroll.
-        document.documentElement.classList.add("bg-background");
-      }
-      if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme);
+      try {
+        const theme = await AsyncStorage.getItem("theme");
+        if (Platform.OS === "web") {
+          document.documentElement.classList.toggle("dark", isDarkColorScheme);
+        }
+
+        if (!theme) {
+          await AsyncStorage.setItem("theme", colorScheme);
+          await setAndroidNavigationBar(colorScheme);
+        } else {
+          const colorTheme = theme === "dark" ? "dark" : "light";
+          if (colorTheme !== colorScheme) {
+            setColorScheme(colorTheme);
+            await setAndroidNavigationBar(colorTheme);
+          }
+        }
+      } catch (error) {
+        console.error("Error setting theme:", error);
+      } finally {
         setIsColorSchemeLoaded(true);
-        return;
+        SplashScreen.hideAsync();
       }
-      const colorTheme = theme === "dark" ? "dark" : "light";
-      if (colorTheme !== colorScheme) {
-        setColorScheme(colorTheme);
-        setAndroidNavigationBar(colorTheme);
-        setIsColorSchemeLoaded(true);
-        return;
-      }
-      setAndroidNavigationBar(colorTheme);
-      setIsColorSchemeLoaded(true);
-    })().finally(() => {
-      SplashScreen.hideAsync();
-    });
-  }, []);
+    })();
+  }, [colorScheme]);
 
   if (!isColorSchemeLoaded) {
     return null;
@@ -74,8 +75,8 @@ export default function RootLayout() {
             screenOptions={{
               headerShown: false,
             }}
+            initialRouteName="/(tabs)"
           />
-          <Redirect href="/(tabs)/home" />
           <PortalHost />
         </ThemeProvider>
       </QueryClientProvider>
