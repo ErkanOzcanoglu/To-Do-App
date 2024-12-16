@@ -1,7 +1,7 @@
 import "@/global.css";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { SplashScreen, Stack } from "expo-router";
+import { Redirect, SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
@@ -74,8 +74,8 @@ export default function RootLayout() {
             screenOptions={{
               headerShown: false,
             }}
-            initialRouteName="/(tabs)"
           />
+          <Redirect href="/(tabs)/home" />
           <PortalHost />
         </ThemeProvider>
       </QueryClientProvider>

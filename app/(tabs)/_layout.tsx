@@ -21,11 +21,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="tasks"
+        name="task-list"
         options={{
-          title: "Tasks",
+          title: "Taks List",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Check size={24} color={color} />,
+          tabBarIcon: ({ color }) => <Home size={24} color={color} />,
         }}
       />
     </Tabs>

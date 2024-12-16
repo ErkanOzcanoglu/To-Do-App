@@ -2,9 +2,9 @@ export type Task = {
   id: string;
   title: string;
   description: string;
-  deadline: string;
+  deadline: any;
   deadlineTime: string;
   isCompleted: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 };
