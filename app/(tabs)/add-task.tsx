@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Button, SafeAreaView, View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { useTaskStore } from "@/hooks/use-task-store";
 import AddTaskForm from "@/components/tasks/add-task-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 
 export default function AddTask() {
   const addTask = useTaskStore((state) => state.addTask);
@@ -15,7 +17,13 @@ export default function AddTask() {
     title: "",
     description: "",
     deadline: new Date(),
-    deadlineTime: "12:00",
+    // set default time to current time in 24-hour format in turkey
+    deadlineTime: new Date().toLocaleTimeString("tr-TR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Europe/Istanbul",
+    }),
   });
   const onDateChange = (event: any, selectedDate?: Date) => {
     setShowDatePicker(false);
@@ -62,7 +70,12 @@ export default function AddTask() {
         title: "",
         description: "",
         deadline: new Date(),
-        deadlineTime: "12:00",
+        deadlineTime: new Date().toLocaleTimeString("tr-TR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+          timeZone: "Europe/Istanbul",
+        }),
       });
     } catch (error) {
       console.error("Error saving task:", error);
@@ -89,11 +102,15 @@ export default function AddTask() {
           onTimeChange={onTimeChange}
           onSubmit={handleAddTask}
         />
-        <Button
-          title="Add Task"
-          onPress={handleAddTask}
-          disabled={!formData.title.trim()}
-        />
+        <View className="flex-row justify-center items-center p-4">
+          <Button
+            onPress={handleAddTask}
+            className="w-1/2"
+            disabled={!formData.title.trim()}
+          >
+            <Text>Add Task</Text>
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
