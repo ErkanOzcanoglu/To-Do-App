@@ -1,33 +1,33 @@
-# Görev Listesi Uygulaması (To-Do App)
+# Task Management Application (To-Do App)
 
-## Proje Açıklaması
-Bu proje, React Native kullanarak oluşturulan basit bir görev yönetim uygulamasıdır. Uygulama kullanıcıların görevlerini eklemesine, listelemesine ve tamamlanmış olarak işaretlemesine olanak tanır.
+## Project Description
+This project is a simple task management application built using React Native. It allows users to add, list, and mark tasks as completed.
 
-## Kullanılan Teknolojiler
+## Technologies Used
 - React Native
-- Zustand (State Yönetimi)
-- AsyncStorage (Veri Depolama)
+- Zustand (State Management)
+- AsyncStorage (Data Storage)
 
-## Kurulum
-1. Projeyi klonlayın:
+## Installation
+1. Clone the repository:
    ```bash
    git clone https://github.com/ErkanOzcanoglu/ToDoApp.git
    ```
 
-2. Bağımlılıkları yükleyin
+2. Install dependencies:
     ```bash
    npm install
    ```
-3. Uygulamayı başlatın
+3. Start the application:
       ```bash
    npx react-native run-android
    ```
-      veya
+      or
       ```bash
    npx expo start
    ```
       
-# Özellikler
-- Görev ekleme ve listeleme.
-- Görev tamamlama durumu yönetimi.
-- AsyncStorage ile veri saklama.
+# Features
+- Add and list tasks.
+- Manage task completion status.
+- Persist data using AsyncStorage.
