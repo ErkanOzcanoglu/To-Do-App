@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useColorScheme as useNativeColorScheme } from "react-native";
+import { Appearance } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setAndroidNavigationBar } from "./android-navigation-bar";
 
 type ColorScheme = "light" | "dark" | "system";
 
@@ -18,31 +19,48 @@ const ColorSchemeContext = createContext<ColorSchemeContextType | undefined>(
 export const ColorSchemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const nativeColorScheme = useNativeColorScheme();
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(
-    nativeColorScheme || "light"
-  );
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("system");
   const [systemColorScheme, setSystemColorScheme] = useState<"light" | "dark">(
-    nativeColorScheme || "light"
+    Appearance.getColorScheme() || "light"
   );
 
   useEffect(() => {
-    const loadStoredTheme = async () => {
-      const storedTheme = await AsyncStorage.getItem("theme");
-      if (storedTheme) {
-        setColorScheme(storedTheme as ColorScheme);
+    const listener = Appearance.addChangeListener(({ colorScheme }) => {
+      const newSystemColorScheme = colorScheme || "light";
+      setSystemColorScheme(newSystemColorScheme);
+
+      if (colorScheme === "system") {
+        const newTheme = newSystemColorScheme;
+        setColorScheme(newTheme);
+        setAndroidNavigationBar(newTheme);
       }
-    };
-    loadStoredTheme();
+    });
+
+    return () => listener.remove();
   }, []);
 
   useEffect(() => {
-    setSystemColorScheme(nativeColorScheme || "light");
-  }, [nativeColorScheme]);
+    const updateTheme = async () => {
+      const savedTheme = await AsyncStorage.getItem("theme");
+      if (!savedTheme || savedTheme === "system") {
+        const newTheme = systemColorScheme === "dark" ? "dark" : "light";
+        setColorScheme(newTheme);
+        setAndroidNavigationBar(newTheme);
+      }
+    };
+
+    updateTheme();
+  }, [systemColorScheme]);
 
   const setTheme = (theme: ColorScheme) => {
     setColorScheme(theme);
     AsyncStorage.setItem("theme", theme);
+
+    if (theme !== "system") {
+      setAndroidNavigationBar(theme);
+    } else {
+      setAndroidNavigationBar(systemColorScheme);
+    }
   };
 
   const isDarkColorScheme =
