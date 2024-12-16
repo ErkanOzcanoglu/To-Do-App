@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Animated } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useTaskStore } from "@/hooks/use-task-store";
 import { AlertTriangle, Calendar, Check, Clock, X } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +23,17 @@ const Task = ({ item }: TaskProps) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { removeTask, toggleTask } = useTaskStore();
   const router = useRouter();
+  const isOverdue = useMemo(() => {
+    try {
+      const deadline = item.deadline + "T" + item.deadlineTime;
+      const now = new Date().toISOString();
+
+      return deadline < now && !item.isCompleted;
+    } catch (error) {
+      console.error("Error calculating overdue status:", error);
+      return false;
+    }
+  }, [item.deadline, item.deadlineTime, item.isCompleted]);
 
   const handleDeleteInit = () => {
     setIsConfirming(true);
@@ -75,9 +86,9 @@ const Task = ({ item }: TaskProps) => {
           style={{
             transform: [{ translateX: slideAnim }],
           }}
-          className={`p-4 mb-3 rounded-lg border border-slate-300 ${
-            item.isCompleted ? "bg-green-100" : "bg-gray-100"
-          }`}
+          className={`p-4 mb-3 rounded-lg border border-slate-300 
+            ${isOverdue ? "bg-red-100 dark:bg-red-900/30" : "bg-card"}
+            ${item.isCompleted ? "bg-green-100" : "bg-gray-100"}`}
         >
           <View className="flex-row justify-between items-center mb-2">
             <Text

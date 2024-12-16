@@ -18,6 +18,7 @@ const Home = () => {
   useEffect(() => {
     const randomTasks = tasks
       .filter((task) => !task.isCompleted)
+      .filter((task) => task.deadline > new Date().toISOString())
       .sort(() => 0.5 - Math.random())
       .slice(0, 2);
 
