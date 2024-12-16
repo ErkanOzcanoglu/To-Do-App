@@ -9,7 +9,6 @@ import TasksList from "@/components/home/tasks-list";
 import { useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Home = () => {
   const router = useRouter();

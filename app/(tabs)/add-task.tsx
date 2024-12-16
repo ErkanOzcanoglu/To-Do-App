@@ -17,7 +17,6 @@ export default function AddTask() {
     title: "",
     description: "",
     deadline: new Date(),
-    // set default time to current time in 24-hour format in turkey
     deadlineTime: new Date().toLocaleTimeString("tr-TR", {
       hour: "2-digit",
       minute: "2-digit",

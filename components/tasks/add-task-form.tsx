@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Input } from "../ui/input";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Button } from "../ui/button";
+import { Text } from "../ui/text";
 
 interface FormData {
   title: string;
@@ -41,6 +42,7 @@ const AddTaskForm = ({
       <View className="mb-4">
         <Text className="mb-2">Title</Text>
         <Input
+          className="border-border"
           placeholder="Enter task title"
           value={formData.title}
           onChangeText={(text) => setFormData({ ...formData, title: text })}
@@ -50,6 +52,7 @@ const AddTaskForm = ({
       <View className="mb-4">
         <Text className="mb-2">Description</Text>
         <Input
+          className="border-border"
           placeholder="Enter task description"
           value={formData.description}
           onChangeText={(text) =>
@@ -63,7 +66,7 @@ const AddTaskForm = ({
       <View className="mb-4">
         <Text className="mb-2">Deadline Date</Text>
         <TouchableOpacity
-          className="border border-gray-300 rounded p-2"
+          className="border border-border rounded p-2"
           onPress={() => setShowDatePicker(true)}
         >
           <Text>{formData.deadline.toLocaleDateString()}</Text>
@@ -80,7 +83,7 @@ const AddTaskForm = ({
       <View className="mb-4">
         <Text className="mb-2">Deadline Time</Text>
         <TouchableOpacity
-          className="border border-gray-300 rounded p-2"
+          className="border border-border rounded p-2"
           onPress={() => setShowTimePicker(true)}
         >
           <Text>{formData.deadlineTime}</Text>

@@ -43,49 +43,49 @@ const FilteredTasks = ({ taskData }: TaskData) => {
   return (
     <View className="mt-10">
       <View className="flex-row justify-between gap-[2vw]">
-        <View className="bg-muted-foreground rounded-[10px] w-[45vw] h-[175px]">
+        <View className="bg-gray-100 rounded-lg border border-slate-300 w-[45vw] h-[175px]">
           <View className="p-4 gap-3">
             <View>
               <CalendarCheck size={70} color={"black"} />
             </View>
             <View>
-              <Text className="text-muted ml-2 font-semibold text-2xl">
+              <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                 Daily
               </Text>
             </View>
             <View>
-              <Text className="text-muted ml-2 font-semibold text-2xl">
+              <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                 {dailyTasks} Tasks
               </Text>
             </View>
           </View>
         </View>
         <View className=" flex gap-[10px]">
-          <View className="w-[45vw] h-[82.5px] bg-muted-foreground rounded-[10px]">
+          <View className="w-[45vw] h-[82.5px] bg-gray-100 rounded-lg border border-slate-300">
             <View className="p-3 gap-3 flex-row items-center">
               <View>
                 <CalendarCheck size={50} color={"black"} />
               </View>
               <View>
-                <Text className="text-muted ml-2 font-semibold text-2xl">
+                <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                   Weekly
                 </Text>
-                <Text className="text-muted ml-2 font-semibold text-2xl">
+                <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                   {weeklyTasks} Tasks
                 </Text>
               </View>
             </View>
           </View>
-          <View className="w-[45vw] h-[82.5px] bg-muted-foreground rounded-[10px]">
+          <View className="w-[45vw] h-[82.5px] bg-gray-100 rounded-lg border border-slate-300">
             <View className="p-3 gap-3 flex-row items-center">
               <View>
                 <CalendarCheck size={50} color={"black"} />
               </View>
               <View>
-                <Text className="text-muted ml-2 font-semibold text-2xl">
+                <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                   Monthly
                 </Text>
-                <Text className="text-muted ml-2 font-semibold text-2xl">
+                <Text className="text-gray-800 ml-2 font-semibold text-2xl">
                   {monthlyTasks} Tasks
                 </Text>
               </View>
