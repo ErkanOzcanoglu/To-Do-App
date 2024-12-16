@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { Text } from "@/components/ui/text";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useTaskStore } from "@/hooks/use-task-store";
-import { ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "@/components/home/header";
 import FilteredTasks from "@/components/home/filtered-tasks";
 import TasksList from "@/components/home/tasks-list";
 import { useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Home = () => {
   const router = useRouter();
@@ -45,9 +46,11 @@ const Home = () => {
     router.navigate("/add-task");
   };
 
+  const { top } = useSafeAreaInsets();
+
   return (
-    <SafeAreaView>
-      <View className="p-4 w-full h-full">
+    <SafeAreaView style={{ paddingTop: top, flex: 1 }}>
+      <View className="bg-background p-4 w-full h-full">
         <Header />
         <ScrollView>
           <FilteredTasks taskData={notCompletedTasks} />

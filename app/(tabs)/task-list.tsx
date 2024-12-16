@@ -10,7 +10,7 @@ const TaskList = () => {
 
   return (
     <SafeAreaView>
-      <View className="p-4">
+      <View className="p-4 bg-background w-full h-full">
         <FlatList
           data={tasks}
           renderItem={({ item }) => <Task item={item} />}

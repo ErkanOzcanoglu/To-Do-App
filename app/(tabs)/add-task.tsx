@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { SafeAreaView, Button } from "react-native";
+import { Button, SafeAreaView, View } from "react-native";
 import { useTaskStore } from "@/hooks/use-task-store";
 import AddTaskForm from "@/components/tasks/add-task-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AddTask() {
   const addTask = useTaskStore((state) => state.addTask);
@@ -67,25 +68,33 @@ export default function AddTask() {
       console.error("Error saving task:", error);
     }
   };
+  const { top } = useSafeAreaInsets();
 
   return (
-    <SafeAreaView className="flex bg-background">
-      <AddTaskForm
-        formData={formData}
-        setFormData={setFormData}
-        showDatePicker={showDatePicker}
-        setShowDatePicker={setShowDatePicker}
-        showTimePicker={showTimePicker}
-        setShowTimePicker={setShowTimePicker}
-        onDateChange={onDateChange}
-        onTimeChange={onTimeChange}
-        onSubmit={handleAddTask}
-      />
-      <Button
-        title="Add Task"
-        onPress={handleAddTask}
-        disabled={!formData.title.trim()}
-      />
+    <SafeAreaView>
+      <View
+        style={{
+          paddingTop: top,
+        }}
+        className="flex bg-background h-full"
+      >
+        <AddTaskForm
+          formData={formData}
+          setFormData={setFormData}
+          showDatePicker={showDatePicker}
+          setShowDatePicker={setShowDatePicker}
+          showTimePicker={showTimePicker}
+          setShowTimePicker={setShowTimePicker}
+          onDateChange={onDateChange}
+          onTimeChange={onTimeChange}
+          onSubmit={handleAddTask}
+        />
+        <Button
+          title="Add Task"
+          onPress={handleAddTask}
+          disabled={!formData.title.trim()}
+        />
+      </View>
     </SafeAreaView>
   );
 }
