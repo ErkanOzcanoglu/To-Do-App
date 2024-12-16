@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import { Text } from "@/components/ui/text";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTaskStore } from "@/hooks/use-task-store";
-import { Button, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "@/components/home/header";
 import FilteredTasks from "@/components/home/filtered-tasks";
 import TasksList from "@/components/home/tasks-list";
+import { useRouter } from "expo-router";
+import { Button } from "@/components/ui/button";
 
 const Home = () => {
-  const { addTask, removeTask, tasks, setTasks } = useTaskStore();
-  const [isLoading, setIsLoading] = React.useState(true);
+  const router = useRouter();
+  const { tasks, setTasks } = useTaskStore();
   const [randomTasks, setRandomTasks] = React.useState<any[]>([]);
-  // 5 random tasks to show on the home screen which are not completed
+  const [notCompletedTasks, setNotCompletedTasks] = React.useState<any[]>([]);
   useEffect(() => {
     const randomTasks = tasks
       .filter((task) => !task.isCompleted)
@@ -20,6 +22,9 @@ const Home = () => {
       .slice(0, 2);
 
     setRandomTasks(randomTasks);
+
+    const notCompletedTasks = tasks.filter((task) => !task.isCompleted);
+    setNotCompletedTasks(notCompletedTasks);
   }, [tasks]);
 
   useEffect(() => {
@@ -31,20 +36,32 @@ const Home = () => {
         }
       } catch (error) {
         console.error("Error loading tasks:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
     loadTasks();
   }, []);
+
+  const handleNavigateToAddTask = () => {
+    router.navigate("/add-task");
+  };
 
   return (
     <SafeAreaView>
       <View className="p-4 w-full h-full">
         <Header />
         <ScrollView>
-          <FilteredTasks taskData={tasks} />
-          <TasksList taskData={randomTasks} />
+          <FilteredTasks taskData={notCompletedTasks} />
+          {randomTasks.length > 0 ? (
+            <TasksList taskData={randomTasks} />
+          ) : (
+            <View className="w-full mt-52 items-center ">
+              <Text>You have no tasks.</Text>
+              <Text>Click the button below to add a new task.</Text>
+              <Button onPress={handleNavigateToAddTask}>
+                <Text>Add a Task</Text>
+              </Button>
+            </View>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
