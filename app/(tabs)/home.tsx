@@ -9,6 +9,7 @@ import TasksList from "@/components/home/tasks-list";
 import { useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AddTask from "./add-task";
 
 const Home = () => {
   const router = useRouter();
@@ -61,12 +62,8 @@ const Home = () => {
           {randomTasks.length > 0 ? (
             <TasksList taskData={randomTasks} />
           ) : (
-            <View className="w-full mt-52 items-center ">
-              <Text>You have no tasks.</Text>
-              <Text>Click the button below to add a new task.</Text>
-              <Button onPress={handleNavigateToAddTask}>
-                <Text>Add a Task</Text>
-              </Button>
+            <View className="w-full items-center ">
+              <AddTask />
             </View>
           )}
         </ScrollView>

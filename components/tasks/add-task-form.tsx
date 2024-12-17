@@ -1,7 +1,7 @@
 import { View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Input } from "../ui/input";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerAndroid from "@react-native-community/datetimepicker";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 
@@ -72,9 +72,11 @@ const AddTaskForm = ({
           <Text>{formData.deadline.toLocaleDateString()}</Text>
         </TouchableOpacity>
         {showDatePicker && (
-          <DateTimePicker
+          <DateTimePickerAndroid
+            testID="dateTimePicker"
             value={formData.deadline}
-            mode="date"
+            mode={"date"}
+            is24Hour={true}
             onChange={onDateChange}
           />
         )}
@@ -89,9 +91,11 @@ const AddTaskForm = ({
           <Text>{formData.deadlineTime}</Text>
         </TouchableOpacity>
         {showTimePicker && (
-          <DateTimePicker
-            value={new Date(`2024-01-01T${formData.deadlineTime}`)}
-            mode="time"
+          <DateTimePickerAndroid
+            testID="dateTimePicker"
+            value={formData.deadline}
+            mode={"time"}
+            is24Hour={true}
             onChange={onTimeChange}
           />
         )}

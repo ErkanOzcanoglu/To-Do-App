@@ -1,17 +1,20 @@
-import { useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
 import { useTaskStore } from "@/hooks/use-task-store";
 import AddTaskForm from "@/components/tasks/add-task-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useRouter } from "expo-router";
 
-export default function AddTask() {
-  const addTask = useTaskStore((state) => state.addTask);
+const AddTask = () => {
+  const { addTask } = useTaskStore();
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -26,6 +29,7 @@ export default function AddTask() {
       timeZone: "Europe/Istanbul",
     }),
   });
+
   const onDateChange = (event: any, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (selectedDate) {
@@ -36,10 +40,11 @@ export default function AddTask() {
   const onTimeChange = (event: any, selectedTime?: Date) => {
     setShowTimePicker(false);
     if (selectedTime) {
-      const timeString = selectedTime.toLocaleTimeString("en-US", {
+      const timeString = selectedTime.toLocaleTimeString("tr-TR", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
+        timeZone: "Europe/Istanbul",
       });
       setFormData((prev) => ({ ...prev, deadlineTime: timeString }));
     }
@@ -48,25 +53,29 @@ export default function AddTask() {
   const handleAddTask = async () => {
     if (!formData.title.trim()) return;
 
-    const newTask = {
-      id: Date.now().toString(),
-      title: formData.title.trim(),
-      description: formData.description.trim(),
-      deadline: formData.deadline.toISOString(),
-      deadlineTime: formData.deadlineTime,
-      isCompleted: false,
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    };
-
-    addTask(newTask);
-
+    setIsLoading(true);
     try {
+      const newTask = {
+        id: Date.now().toString(),
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        deadline: formData.deadline.toISOString(),
+        deadlineTime: formData.deadlineTime,
+        isCompleted: false,
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      };
+
+      // Add to store first
+      addTask(newTask);
+
+      // Then save to AsyncStorage
       const existingTasks = await AsyncStorage.getItem("@tasks");
       const tasks = existingTasks ? JSON.parse(existingTasks) : [];
       tasks.push(newTask);
       await AsyncStorage.setItem("@tasks", JSON.stringify(tasks));
 
+      // Reset form
       setFormData({
         title: "",
         description: "",
@@ -79,21 +88,24 @@ export default function AddTask() {
         }),
       });
 
-      router.navigate(`/(task)/task-detail?id=${newTask.id}`);
+      // Navigate with error handling
+      try {
+        await router.push("/task-list");
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        Alert.alert("Error", "Could not navigate to task list");
+      }
     } catch (error) {
       console.error("Error saving task:", error);
+      Alert.alert("Error", "Could not save task");
+    } finally {
+      setIsLoading(false);
     }
   };
-  const { top } = useSafeAreaInsets();
 
   return (
-    <SafeAreaView>
-      <View
-        style={{
-          paddingTop: top,
-        }}
-        className="flex bg-background h-full"
-      >
+    <SafeAreaView className="">
+      <View className="flex bg-background h-full">
         <AddTaskForm
           formData={formData}
           setFormData={setFormData}
@@ -111,10 +123,12 @@ export default function AddTask() {
             className="w-1/2"
             disabled={!formData.title.trim()}
           >
-            <Text>Add Task</Text>
+            <Text>{isLoading ? "Adding..." : "Add Task"}</Text>
           </Button>
         </View>
       </View>
     </SafeAreaView>
   );
-}
+};
+
+export default AddTask;
