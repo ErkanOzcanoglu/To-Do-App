@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 
@@ -64,6 +64,7 @@ function RootLayoutNav() {
             }
             translucent={true}
           />
+          <Redirect href={"/(tabs)/home"} />
           <Stack
             screenOptions={{
               headerShown: false,

@@ -29,7 +29,7 @@ export const ColorSchemeProvider: React.FC<{ children: React.ReactNode }> = ({
       const newSystemColorScheme = colorScheme || "light";
       setSystemColorScheme(newSystemColorScheme);
 
-      if (colorScheme === "system") {
+      if (colorScheme === "dark" || colorScheme === "light") {
         const newTheme = newSystemColorScheme;
         setColorScheme(newTheme);
         setAndroidNavigationBar(newTheme);

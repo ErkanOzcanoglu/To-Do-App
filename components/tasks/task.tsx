@@ -75,6 +75,21 @@ const Task = ({ item }: TaskProps) => {
     }).start();
   };
 
+  const completeTask = async (id: string) => {
+    await toggleTask(id);
+    try {
+      const tasks = await AsyncStorage.getItem("@tasks");
+      if (tasks) {
+        const updatedTasks = JSON.parse(tasks).map((task: any) =>
+          task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
+        );
+        await AsyncStorage.setItem("@tasks", JSON.stringify(updatedTasks));
+      }
+    } catch (error) {
+      console.error("Error completing task:", error);
+    }
+  };
+
   return (
     <View>
       <TouchableOpacity
@@ -92,7 +107,7 @@ const Task = ({ item }: TaskProps) => {
         >
           <View className="flex-row justify-between items-center mb-2">
             <Text
-              onPress={() => toggleTask(item.id)}
+              onPress={() => completeTask(item.id)}
               className={`text-lg font-semibold ${
                 item.isCompleted
                   ? "line-through text-gray-500"
@@ -103,7 +118,7 @@ const Task = ({ item }: TaskProps) => {
             </Text>
             <View className="flex-row space-x-2 gap-2">
               <TouchableOpacity
-                onPress={() => toggleTask(item.id)}
+                onPress={() => completeTask(item.id)}
                 className={`p-2 rounded-full ${
                   item.isCompleted ? "bg-green-500" : "bg-gray-300"
                 }`}
